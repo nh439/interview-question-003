@@ -1,12 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "oTURkqgkDoU=",
+  "dgSpecHash": "SOcdHxH+fEk=",
   "success": true,
   "projectFilePath": "D:\\Projects\\interview-question-003\\Backend\\example.com.api\\example.com.api\\example.com.api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\NEAccount\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.12\\microsoft.aspnetcore.openapi.10.0.12.nupkg.sha512",
-    "C:\\Users\\NEAccount\\.nuget\\packages\\microsoft.openapi\\2.12.0\\microsoft.openapi.2.12.0.nupkg.sha512",
-    "C:\\Users\\NEAccount\\.nuget\\packages\\system.text.json\\8.0.5\\system.text.json.8.0.5.nupkg.sha512"
+    "C:\\Users\\NEAccount\\.nuget\\packages\\microsoft.openapi\\2.12.0\\microsoft.openapi.2.12.0.nupkg.sha512"
   ],
   "logs": []
 }
