@@ -1,0 +1,7 @@
+﻿services:
+  example.com.api:
+    image: example.com.api
+    build:
+      context: .
+      dockerfile: example.com.api/Dockerfile
+
