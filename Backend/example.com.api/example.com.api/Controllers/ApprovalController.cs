@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using example.com.api.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace example.com.api.Controllers;
 
-public class ApprovalController : Controller
+[ApiController]
+[Route("[controller]")]
+public class ApprovalController(IApprovalService approvalService) : Controller
 {
     // GET
-    public IActionResult Index()
+    public async Task<IActionResult> Index(string? search, int page = 1, int pageSize = 20)
     {
-        return View();
+        var result = await approvalService.ListApprovalAsync(search, page, pageSize);
+        return Ok(result);
     }
 }

@@ -2,8 +2,8 @@
 
 public static class DatabaseProviderConstraint
 {
-    public const string SqlServer = "SqlServer";
-    public const string MySql = "MySql";
-    public const string Sqlite =  "Sqlite";
-    public const string PostgreSQL = "PostgreSQL";
+    public const string SqlServer = "sqlserver";
+    public const string MySql = "mysql";
+    public const string Sqlite =  "sqlite";
+    public const string PostgreSQL = "postgresql";
 }

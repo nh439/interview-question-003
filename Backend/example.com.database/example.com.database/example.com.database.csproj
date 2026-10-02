@@ -14,12 +14,12 @@
       </PackageReference>
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.12" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.12" />
+      <PackageReference Include="MySql.EntityFrameworkCore" Version="10.0.9" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
-      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Entity\" />
+      <ProjectReference Include="..\..\example.com.shared\example.com.shared\example.com.shared.csproj" />
     </ItemGroup>
 
 </Project>

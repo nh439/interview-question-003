@@ -1,1 +1,57 @@
-<p>home works!</p>
+<h1 style="text-align: center">
+IT 03 Approval
+</h1>
+<br>
+<br>
+<div class="row">
+  <div class="col-1"></div>
+  <div class="col-10">
+    <table class="table table-bordered table-hover" style="text-align: center">
+      <thead class="table-dark">
+      <tr class="">
+        <th></th>
+        <th>รายการ</th>
+        <th>เหตุผล</th>
+        <th>สถานะเอกสาร</th>
+      </tr>
+      </thead>
+      <tbody>
+        @if(loading()){
+          <tr class="table-info">
+            <td colspan="4">กำลังโหลด</td>
+          </tr>
+        }
+          @else if( approvals()?.hasData){
+            @for(item of approvals()!.items;track  item.id){
+              <tr class="table-primary">
+                <td>
+                  @if(item.isPending){
+                    <div class="form-check justify-content-center">
+                      <input class="form-check-input" type="checkbox" value="" id="checkDefault">
+                    </div>
+                  }
+                  @else{
+                    <div class="form-check justify-content-center">
+                      <input class="form-check-input" type="checkbox" value="" id="checkDefault" disabled>
+                    </div>
+                  }
+                </td>
+                <td>{{item.name}}</td>
+                <td>{{item.reason}}</td>
+                <td>{{item.approveStatus}}</td>
+              </tr>
+
+          }
+          }
+            @else {
+            <tr class="table-secondary">
+              <td colspan="4">ไม่พบข้อมูล</td>
+            </tr>
+          }
+
+      </tbody>
+    </table>
+  </div>
+  <div class="col-1"></div>
+</div>
+

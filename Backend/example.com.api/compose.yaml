@@ -5,3 +5,9 @@
       context: .
       dockerfile: example.com.api/Dockerfile
 
+  example.com.migration:
+    image: example.com.migration
+    build:
+      context: .
+      dockerfile: ../example.com.migration/example.com.migration/Dockerfile
+
