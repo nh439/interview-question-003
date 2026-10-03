@@ -7,10 +7,14 @@ namespace example.com.api.Services;
 public interface IApprovalService
 {
     Task<PagedItem<Approval>> ListApprovalAsync(string? searchName = null, int page = 1, int pageSize = 20);
+    Task<int> ApproveAsync(IEnumerable<long> approvalIds, bool isApproved, string? approveReason);
 }
 
 public class ApprovalService(ApprovalRepository approvalRepository) : IApprovalService
 {
     public async Task<PagedItem<Approval>> ListApprovalAsync(string? searchName = null, int page = 1, int pageSize = 20)=>
     await approvalRepository.ListApprovalAsync(searchName, page, pageSize);
+    
+    public async Task<int> ApproveAsync(IEnumerable<long> approvalIds, bool isApproved, string? approveReason) => 
+    await approvalRepository.ApproveAsync(approvalIds, isApproved, approveReason);  
 }

@@ -6,12 +6,32 @@ IT 03 Approval
 <div class="row">
   <div class="col-1"></div>
   <div class="col-10">
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-6">
+        <div class="input-group mb-3">
+          <input type="text" [(ngModel)]="search"  class="form-control" placeholder="Search Request Name" aria-label="srn" aria-describedby="button-addon2" />
+          <button class="btn btn-outline-primary" type="button" id="button-addon2" (click)="applySearch()" >Search</button>
+        </div>
+      </div>
+      <div class="col-4">
+        <h1 class="justify-content-end align-content-end">Total : {{total()}}</h1>
+      </div>
+    </div>
+    <br>
+    <br>
+    <button class="btn btn-success mx-1" (click)="openDialog(true)" >Approve</button>
+    <button class="btn btn-danger mx-1" (click)="openDialog(false)">Reject</button>
+    <br>
+    <br>
     <table class="table table-bordered table-hover" style="text-align: center">
       <thead class="table-dark">
       <tr class="">
         <th></th>
         <th>รายการ</th>
         <th>เหตุผล</th>
+        <th>ผู้ขอ</th>
         <th>สถานะเอกสาร</th>
       </tr>
       </thead>
@@ -38,20 +58,64 @@ IT 03 Approval
                 </td>
                 <td>{{item.name}}</td>
                 <td>{{item.reason}}</td>
-                <td>{{item.approveStatus}}</td>
+                <td>{{item.requestBy}}</td>
+                <td>
+                  @if(item.approveStatus === 'Approved'){
+                    <h4> <span class="badge badge-pill badge-success">Approve</span> </h4>
+                  }
+                  @else if(item.approveStatus ==='Rejected'){
+                    <h4> <span class="badge badge-pill badge-danger">Rejected</span> </h4>
+                  } @else if (item.approveStatus ==='Pending'){
+                    <h4> <span class="badge badge-pill badge-primary">Pending</span> </h4>
+                  }
+                  @else{
+                    <h4>  <span class="badge badge-pill badge-secondary">{{item.approveStatus}}</span> </h4>
+                  }
+                </td>
               </tr>
 
           }
           }
             @else {
             <tr class="table-secondary">
-              <td colspan="4">ไม่พบข้อมูล</td>
+              <td colspan="5">ไม่พบข้อมูล</td>
             </tr>
           }
 
       </tbody>
     </table>
+
+    @if(!loading() && approvals()?.hasData){
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-end">
+        @if(currentPage() > 1){
+        <li class="page-item">
+          <a class="page-link" (click)="goToPage(currentPage()-1)"  tabindex="-1">Previous</a>
+        </li>
+        }
+        @for(page of getPaging(); track page){
+          @if(page === currentPage()){
+            <li class="page-item"><a class="page-link active"  (click)="goToPage(page)" >{{page}}</a></li>
+          }
+          @else{
+          <li class="page-item"><a class="page-link"  (click)="goToPage(page)" >{{page}}</a></li>
+          }
+
+        }
+        @if(currentPage() < lastpage()){
+        <li class="page-item">
+          <a class="page-link" (click)="goToPage(currentPage()+1)" >Next</a>
+        </li>
+        }
+      </ul>
+    </nav>
+    }
+
   </div>
   <div class="col-1"></div>
 </div>
-
+<app-approval-dialog
+  [visible]="showDialog()"
+  [approve]="approve()"
+  (closed)="closeDialog()"
+></app-approval-dialog>
