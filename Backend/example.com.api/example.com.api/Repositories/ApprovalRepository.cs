@@ -1,5 +1,6 @@
 ﻿using example.com.database;
 using example.com.database.Entity;
+using example.com.database.Helper;
 using example.com.shared.Constraint;
 using example.com.shared.SharedModel;
 using Microsoft.EntityFrameworkCore;
@@ -26,11 +27,15 @@ public class ApprovalRepository(DataContext context)
     }
 
     public async Task<int> ApproveAsync(IEnumerable<long> approvalIds, bool isApproved, string? approveReason) =>
-        await _entity.Where(req => approvalIds.Contains(req.Id))
+        await _entity.Where(req => approvalIds.Contains(req.Id) && req.IsPending)
             .ExecuteUpdateAsync(s =>
                 s.SetProperty(prop => prop.ApproveBy, "Admin")
                     .SetProperty(prop => prop.ApproveReason, approveReason)
                     .SetProperty(prop => prop.ApproveDate, DateTime.Now)
+                    .SetProperty(prop => prop.IsPending,false)
                     .SetProperty(prop => prop.ApproveStatus, isApproved ? ApprovalStatusConstraint.Approved : ApprovalStatusConstraint.Rejected)
             );
+
+    public async Task<bool> ResetAsync() =>
+        await context.ResetData();
 }

@@ -26,7 +26,7 @@ public class ApprovalController(
         }
     }
 
-    [HttpPut("approve")]
+    [HttpPatch("approve")]
     public async Task<IActionResult> Approve([FromBody] ApprovalRequest request)
     {
         if (!request.ApprovalIds.Any())
@@ -42,5 +42,21 @@ public class ApprovalController(
             return StatusCode(500, ex.Message);
         }
     }
+
+    [HttpGet("Reset")]
+    public async Task<IActionResult> ResetData()
+    {
+        try
+        {
+            var result = await approvalService.ResetAsync();
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, ex.Message);
+            return StatusCode(500, ex.Message);
+        }
+    }
+    
     
 }

@@ -1,4 +1,4 @@
-@if (visible()) {
+@if (visible()){
 
   <div
     class="modal fade show d-block"
@@ -12,7 +12,11 @@
 
         <div class="modal-header">
           <h5 class="modal-title">
-            เพิ่มรายการ
+            @if(approve()){
+              Approve Request
+            } @else {
+              Reject Request
+            }
           </h5>
 
           <button
@@ -28,11 +32,12 @@
             <label class="form-label">
               รายการ
             </label>
+            <ul>
+            @for (item of selectedApproval(); track item.id) {
+              <li>{{item.name}}</li>
 
-            <input
-              type="text"
-              class="form-control">
-          </div>
+            }
+            </ul>
 
           <div class="mb-3">
             <label class="form-label">
@@ -41,7 +46,9 @@
 
             <textarea
               class="form-control"
-              rows="3">
+              rows="3"
+              [(ngModel)]="reason"
+            >
             </textarea>
           </div>
 
@@ -49,27 +56,41 @@
 
         <div class="modal-footer">
 
-          <button
-            type="button"
-            class="btn btn-secondary"
-            (click)="close()">
-            ยกเลิก
-          </button>
+          @if(isSubmitting()){
+            <button
+              type="button"
+              class="btn btn-secondary"
+              disabled>
+             <span
+               class="spinner-border spinner-border-sm me-2">
+              </span>  Submitting...
+            </button>
+          } @else {
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="close()">
+              Close
+            </button>
 
-          <button
-            type="button"
-            class="btn btn-primary">
-            บันทึก
-          </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="submit()" >
+              Confirm
+            </button>
+          }
+
 
         </div>
 
       </div>
 
     </div>
-
+    </div>
   </div>
 
   <div class="modal-backdrop fade show"></div>
-
 }
+
+

@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { approvalService } from '../../apiService/approvalService';
 import { PagedItem } from '../../types/PagedItem';
 import { Approval } from '../../types/Approval';
@@ -19,9 +19,16 @@ export class Home {
   currentPage = signal<number>(1);
   lastpage = signal(1);
   total = signal(1);
-showDialog = signal(false);
-approve = signal(true);
+  showDialog = signal(false);
+  approve = signal(true);
+  selectedApproval = signal<Approval[]>([]);
+  resultMessage = signal('');
+  isSuccess = signal(true);
+  processed = signal(false);
+
+
   ngOnInit(): void {
+
     this.loading.set(true);
     this.loadApprovals();
   }
@@ -61,11 +68,46 @@ approve = signal(true);
     return pageToDisplay;
   }
 
-  openDialog(isApprove : boolean): void {
+  openDialog(isApprove: boolean): void {
     this.showDialog.set(true);
     this.approve.set(isApprove);
   }
   closeDialog(): void {
     this.showDialog.set(false);
+  }
+
+  toggleApproval(item: Approval, checked: boolean): void {
+    if (checked) {
+      // ป้องกันข้อมูลซ้ำ
+      this.selectedApproval.update((items) => {
+        if (items.some((x) => x.id === item.id)) {
+          return items;
+        }
+
+        return [...items, item];
+      });
+    } else {
+      // เอา item ออกจาก selected
+      this.selectedApproval.update((items) => items.filter((x) => x.id !== item.id));
+    }
+  }
+  onSuccessAction(res: number) {
+    this.resultMessage.set(`${this.approve() ? 'Approved' : 'Rejected'} ${res} Request Successful`);
+    this.isSuccess.set(true);
+    this.processed.set(true);
+    this.showDialog.set(false);
+    this.selectedApproval.set([]);
+    this.loadApprovals();
+  }
+  onFailureAction() {
+    this.resultMessage.set('Error While Submitting the approval');
+    this.isSuccess.set(false);
+    this.processed.set(true);
+    this.showDialog.set(false);
+    this.selectedApproval.set([]);
+    this.loadApprovals();
+  }
+  closeAlert(): void {
+    this.processed.set(false);
   }
 }
