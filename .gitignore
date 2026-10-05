@@ -4,7 +4,6 @@
 
 /.vs
 
-
 # Default ignored files
 /shelf/
 /workspace.xml
@@ -69,3 +68,11 @@ Thumbs.db
 
 *\.idea
 .idea
+
+appsettings.*.json
+/Backend/example.com.api/.vs/example.com.api
+/Backend/example.com.api/example.com.api/appsettings.Development.json
+
+/bin
+/obj
+/debug

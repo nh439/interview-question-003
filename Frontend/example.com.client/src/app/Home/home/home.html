@@ -1,0 +1,145 @@
+<h1 style="text-align: center">
+IT 03 Approval
+</h1>
+<br>
+<br>
+<div class="row">
+  <div class="col-1"></div>
+  <div class="col-10">
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-6">
+        <div class="input-group mb-3">
+          <input type="text" [(ngModel)]="search"  class="form-control" placeholder="Search Request Name" aria-label="srn" aria-describedby="button-addon2" />
+          <button class="btn btn-outline-primary" type="button" id="button-addon2" (click)="applySearch()" >Search</button>
+        </div>
+      </div>
+      <div class="col-4">
+        @if(!loading()){
+        <h1 class="justify-content-end align-content-end">Total : {{total()}}</h1>
+        }
+      </div>
+    </div>
+    @if(selectedApproval() && selectedApproval().length > 0){
+    <br>
+    <br>
+    <button class="btn btn-success mx-1" (click)="openDialog(true)" >Approve</button>
+    <button class="btn btn-danger mx-1" (click)="openDialog(false)">Reject</button>
+    }
+    <br>
+    <br>
+    @if (processed()) {
+      @if(isSuccess()){
+        <div class="alert alert-success d-flex align-items-center" role="alert">
+          {{resultMessage()}}
+          <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close" (click)="closeAlert()" ></button>
+        </div>
+      } @else {
+        <div class="alert alert-danger d-flex align-items-cente" role="alert">
+          {{resultMessage()}}
+          <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close" (click)="closeAlert()" ></button>
+        </div>
+      }
+    }
+    <table class="table table-bordered table-hover" style="text-align: center">
+      <thead class="table-dark">
+      <tr class="">
+        <th></th>
+        <th>Name</th>
+        <th>Reason</th>
+        <th>Requester</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+        @if(loading()){
+          <tr class="table-info">
+            <td colspan="6">กำลังโหลด</td>
+          </tr>
+        }
+          @else if( approvals()?.hasData){
+            @for(item of approvals()!.items;track  item.id){
+              <tr class="table-primary">
+                <td>
+                  @if(item.isPending){
+                    <div class="form-check justify-content-center">
+                      <input class="form-check-input" type="checkbox"
+                             [checked]="selectedApproval().some(app=>app.id===item.id)"
+                             (click)="toggleApproval(item, $any($event.target).checked)"
+                              [attr.id]="('check_'+item.id)"
+                      >
+                    </div>
+                  }
+                  @else{
+                    <div class="form-check justify-content-center">
+                      <input class="form-check-input" type="checkbox" value="" id="checkDefault" disabled>
+                    </div>
+                  }
+                </td>
+                <td>{{item.name}}</td>
+                <td>{{item.reason}}</td>
+                <td>{{item.requestBy}}</td>
+                <td>
+                  {{item.approveStatus}}
+                </td>
+                <td>
+                  <button class="btn btn-info" (click)="openDetailDialog(item)" >View Detail</button>
+                </td>
+              </tr>
+
+          }
+          }
+            @else {
+            <tr class="table-secondary">
+              <td colspan="6">ไม่พบข้อมูล</td>
+            </tr>
+          }
+
+      </tbody>
+    </table>
+
+    @if(!loading() && approvals()?.hasData){
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-end">
+        @if(currentPage() > 1){
+        <li class="page-item">
+          <button class="page-link" (click)="goToPage(currentPage()-1)"  tabindex="-1">Previous</button>
+        </li>
+        }
+        @for(page of getPaging(); track page){
+          @if(page === currentPage()){
+            <li class="page-item"><button class="page-link active"  (click)="goToPage(page)" >{{page}}</button></li>
+          }
+          @else{
+          <li class="page-item"><button class="page-link"  (click)="goToPage(page)" >{{page}}</button></li>
+          }
+
+        }
+        @if(currentPage() < lastpage()){
+        <li class="page-item">
+          <a class="page-link" (click)="goToPage(currentPage()+1)" >Next</a>
+        </li>
+        }
+      </ul>
+    </nav>
+    }
+
+  </div>
+  <div class="col-1"></div>
+</div>
+<app-approval-dialog
+  [visible]="showDialog()"
+  [approve]="approve()"
+  [selectedApproval]="selectedApproval()"
+  (closed)="closeDialog()"
+  (onFailureAction) ="onFailureAction()"
+  (onSuccessAction)="onSuccessAction($event)"
+></app-approval-dialog>
+<app-detail-dialog
+[visible]="showDetailDialog()"
+[approval]="viewDetail()"
+(closed)="closeDetailDialog()"
+></app-detail-dialog>
+

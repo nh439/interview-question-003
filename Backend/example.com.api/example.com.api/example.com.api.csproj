@@ -12,9 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+      <ProjectReference Include="..\..\example.com.database\example.com.database\example.com.database.csproj" />
     </ItemGroup>
 
 </Project>

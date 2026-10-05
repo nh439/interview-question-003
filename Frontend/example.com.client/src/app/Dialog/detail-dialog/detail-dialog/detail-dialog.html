@@ -1,0 +1,97 @@
+@if (visible()) {
+
+  <div
+    class="modal fade show d-block"
+    tabindex="-1"
+    role="dialog"
+    aria-modal="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+
+      <div class="modal-content">
+
+        <div class="modal-header">
+Request &nbsp; <b>{{approval()?.name}}</b>
+        </div>
+
+        <div class="modal-body">
+
+         <div class="row">
+           <div class="col">
+             <div class="form-group">
+               <label for="req_id">Id</label>
+               <input id="req_id" name="req_id" readonly [value]="approval()?.id" type="text" class="form-control">
+             </div>
+             <br>
+             <div class="form-group">
+               <label for="req_name">Name</label>
+               <input id="req_name" name="req_name" type="text" readonly [value]="approval()?.name"  class="form-control">
+             </div>
+             <br>
+             <div class="form-group">
+               <label for="req_dat">Request Date</label>
+               <input id="req_dat" name="req_dat" type="text" readonly [value]="formatDate(approval()?.requestDate)"  class="form-control">
+             </div>
+             <br>
+             <div class="form-group">
+               <label for="req_by">Request By</label>
+               <input id="req_by" name="req_by" type="text" readonly [value]="approval()?.requestBy"  class="form-control">
+             </div>
+             <br>
+             <div class="form-group">
+               <label for="req_rea">Request Reason</label>
+               <textarea id="req_rea" name="req_rea" cols="40" rows="5" [value]="approval()?.reason" readonly class="form-control"></textarea>
+             </div>
+             @if(approval()?.isPending){
+               <br>
+               <div class="form-group">
+                 <label for="app_st">Status</label>
+                 <input id="app_st" name="app_st" type="text" readonly [value]="approval()?.approveStatus"  class="form-control">
+               </div>
+             }
+           </div>
+           @if(!approval()?.isPending){
+           <div class="col">
+             <div class="form-group">
+               <label for="app_st">Status</label>
+               <input id="app_st" name="app_st" type="text" readonly [value]="approval()?.approveStatus"  class="form-control">
+             </div>
+               <br>
+             <div class="form-group">
+               <label for="app_dat">{{approval()?.approveStatus}} Date</label>
+               <input id="app_dat" name="app_dat" type="text" readonly [value]="formatDate(approval()?.approveDate)"  class="form-control">
+             </div>
+               <br>
+             <div class="form-group">
+               <label for="app_by">{{approval()?.approveStatus}} By</label>
+               <input id="app_by" name="app_by" type="text" readonly [value]="approval()?.approveBy"  class="form-control">
+             </div>
+               <br>
+               <div class="form-group">
+                 <label for="app_reason">{{approval()?.approveStatus}} Reason</label>
+                 <textarea id="app_reason" name="app_reason" cols="40" rows="5" readonly [value]="approval()?.approveReason"  class="form-control"></textarea>
+               </div>
+           </div>
+           }
+         </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="close()">
+            Close
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="modal-backdrop fade show"></div>
+}

@@ -1,0 +1,6 @@
+@example.com.migration_HostAddress = http://localhost:5065
+
+GET {{example.com.migration_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
