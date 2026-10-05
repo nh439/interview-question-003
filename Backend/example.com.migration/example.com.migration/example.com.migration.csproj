@@ -16,12 +16,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\example.com.api\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\example.com.database\example.com.database\example.com.database.csproj" />
     </ItemGroup>
 

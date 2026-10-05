@@ -4,9 +4,10 @@ import { PagedItem } from '../../types/PagedItem';
 import { Approval } from '../../types/Approval';
 import { FormsModule } from '@angular/forms';
 import { ApprovalDialog } from '../../Dialog/approval-dialog/approval-dialog/approval-dialog';
+import { DetailDialog } from '../../Dialog/detail-dialog/detail-dialog/detail-dialog';
 
 @Component({
-  imports: [FormsModule, ApprovalDialog],
+  imports: [FormsModule, ApprovalDialog, DetailDialog],
   selector: 'app-home',
   styleUrl: './home.css',
   templateUrl: './home.html',
@@ -25,10 +26,10 @@ export class Home {
   resultMessage = signal('');
   isSuccess = signal(true);
   processed = signal(false);
-
+  viewDetail = signal<Approval | null>(null);
+  showDetailDialog = signal(false);
 
   ngOnInit(): void {
-
     this.loading.set(true);
     this.loadApprovals();
   }
@@ -109,5 +110,13 @@ export class Home {
   }
   closeAlert(): void {
     this.processed.set(false);
+  }
+
+  openDetailDialog(Approval: Approval): void {
+    this.viewDetail.set(Approval);
+    this.showDetailDialog.set(true);
+  }
+  closeDetailDialog(): void {
+    this.showDetailDialog.set(false);
   }
 }

@@ -15,17 +15,26 @@ var configuration = (new ConfigurationBuilder())
 var dbConnection = configuration.GetConnectionString("Connection");
 var dbProvider = configuration.GetConnectionString("Provider");
 var corsPolicy = "CorsPolicy";
+var corsDevPolicy = "CorsDevPolicy";
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi()
     .AddCors(options => options.AddPolicy(corsPolicy, policy =>
         {
-            policy.WithOrigins("http://localhost:4200")
+            var allowedOrigin = configuration.GetSection("AllowedOrigin").Get<string[]>();
+            policy.WithOrigins(allowedOrigin)
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         })
    )
-    .InstallDatabase(dbConnection, dbProvider)
+    .AddCors(options => options.AddPolicy(corsDevPolicy, policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        }
+        ))
+    .InstallDatabase(dbConnection)
     .AddScoped<ApprovalRepository>()
     .AddScoped<IApprovalService,ApprovalService>();
 
@@ -35,8 +44,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseCors(corsDevPolicy);
 }
-app.UseCors(corsPolicy);
+else
+{
+    app.UseCors(corsPolicy);
+    
+}
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

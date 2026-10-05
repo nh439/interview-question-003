@@ -16,7 +16,7 @@ var configuration = (new ConfigurationBuilder())
 var dbConnection = configuration.GetConnectionString("Connection");
 var dbProvider = configuration.GetConnectionString("Provider");
 
-builder.Services.InstallDatabase(dbConnection, dbProvider);
+builder.Services.InstallDatabase(dbConnection);
 
 
 var app = builder.Build();

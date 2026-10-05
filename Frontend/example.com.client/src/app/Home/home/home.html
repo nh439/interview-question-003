@@ -21,10 +21,12 @@ IT 03 Approval
         }
       </div>
     </div>
+    @if(selectedApproval() && selectedApproval().length > 0){
     <br>
     <br>
     <button class="btn btn-success mx-1" (click)="openDialog(true)" >Approve</button>
     <button class="btn btn-danger mx-1" (click)="openDialog(false)">Reject</button>
+    }
     <br>
     <br>
     @if (processed()) {
@@ -44,16 +46,17 @@ IT 03 Approval
       <thead class="table-dark">
       <tr class="">
         <th></th>
-        <th>รายการ</th>
-        <th>เหตุผล</th>
-        <th>ผู้ขอ</th>
-        <th>สถานะเอกสาร</th>
+        <th>Name</th>
+        <th>Reason</th>
+        <th>Requester</th>
+        <th>Status</th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
         @if(loading()){
           <tr class="table-info">
-            <td colspan="5">กำลังโหลด</td>
+            <td colspan="6">กำลังโหลด</td>
           </tr>
         }
           @else if( approvals()?.hasData){
@@ -79,17 +82,10 @@ IT 03 Approval
                 <td>{{item.reason}}</td>
                 <td>{{item.requestBy}}</td>
                 <td>
-                  @if(item.approveStatus === 'Approved'){
-                    <h4> <span class="badge badge-pill badge-success">Approve</span> </h4>
-                  }
-                  @else if(item.approveStatus ==='Rejected'){
-                    <h4> <span class="badge badge-pill badge-danger">Rejected</span> </h4>
-                  } @else if (item.approveStatus ==='Pending'){
-                    <h4> <span class="badge badge-pill badge-primary">Pending</span> </h4>
-                  }
-                  @else{
-                    <h4>  <span class="badge badge-pill badge-secondary">{{item.approveStatus}}</span> </h4>
-                  }
+                  {{item.approveStatus}}
+                </td>
+                <td>
+                  <button class="btn btn-info" (click)="openDetailDialog(item)" >View Detail</button>
                 </td>
               </tr>
 
@@ -97,7 +93,7 @@ IT 03 Approval
           }
             @else {
             <tr class="table-secondary">
-              <td colspan="5">ไม่พบข้อมูล</td>
+              <td colspan="6">ไม่พบข้อมูล</td>
             </tr>
           }
 
@@ -109,15 +105,15 @@ IT 03 Approval
       <ul class="pagination justify-content-end">
         @if(currentPage() > 1){
         <li class="page-item">
-          <a class="page-link" (click)="goToPage(currentPage()-1)"  tabindex="-1">Previous</a>
+          <button class="page-link" (click)="goToPage(currentPage()-1)"  tabindex="-1">Previous</button>
         </li>
         }
         @for(page of getPaging(); track page){
           @if(page === currentPage()){
-            <li class="page-item"><a class="page-link active"  (click)="goToPage(page)" >{{page}}</a></li>
+            <li class="page-item"><button class="page-link active"  (click)="goToPage(page)" >{{page}}</button></li>
           }
           @else{
-          <li class="page-item"><a class="page-link"  (click)="goToPage(page)" >{{page}}</a></li>
+          <li class="page-item"><button class="page-link"  (click)="goToPage(page)" >{{page}}</button></li>
           }
 
         }
@@ -141,5 +137,9 @@ IT 03 Approval
   (onFailureAction) ="onFailureAction()"
   (onSuccessAction)="onSuccessAction($event)"
 ></app-approval-dialog>
-
+<app-detail-dialog
+[visible]="showDetailDialog()"
+[approval]="viewDetail()"
+(closed)="closeDetailDialog()"
+></app-detail-dialog>
 
